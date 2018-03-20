@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class WikiController extends Controller
 {
@@ -26,7 +27,8 @@ class WikiController extends Controller
     public function index()
     {
         //
-        return view('wiki');
+        $kittens = DB::table('kitten')->get();
+        return view('wiki', compact('kittens'));
     }
 
     /**
