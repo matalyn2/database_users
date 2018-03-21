@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<wiki :kittens="{{ $kittens }}">
+<wiki :owners="{{$owners}}" :kittens="{{ $kittens }}">
 
 </wiki>
 @endsection

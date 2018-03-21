@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use MongoDB\Client as MongoDbClient;
 
 class WikiController extends Controller
 {
@@ -27,8 +28,16 @@ class WikiController extends Controller
     public function index()
     {
         //
+        $m = new MongoDbClient(); // connect
+        $db = $m->kittens;
+        $collection = $db->selectCollection('owners');
+
+        $owners = $collection->find();
+        $owners = $owners->toArray();
+        $owners = json_encode($owners);
         $kittens = DB::table('kitten')->get();
-        return view('wiki', compact('kittens'));
+
+        return view('wiki', compact('owners', 'kittens'));
     }
 
     /**
