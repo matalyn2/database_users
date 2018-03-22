@@ -17,7 +17,26 @@ window.Vue = require('vue');
 
 Vue.component('example-component', require('./components/ExampleComponent.vue'));
 Vue.component('wiki', require('./components/main/wiki.vue'));
+Vue.component('cart', require('./components/main/cart.vue'));
+
+
+import store from './vuex/store';
+import { mapActions } from 'vuex';
+
 
 const app = new Vue({
-    el: '#app'
+    el: '#app',
+    store,
+    data: function () {
+        return {
+            cart: {}
+        }
+    },
+    methods: mapActions([
+        'GET_CART',
+    ]),
+    mounted() {
+        // When the program loads we are going to get the user object and all tasks.  See store.js
+        this.GET_CART();
+    }
 });

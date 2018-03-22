@@ -18,5 +18,6 @@ Route::get('/', function () {
 
 Auth::routes();
 
+Route::get('/wiki', 'WikiController@index')->name('wiki');
 Route::get('/home', 'HomeController@index')->name('home');
-Route::resource('/wiki', 'WikiController');
+//Route::resource('/wiki', 'WikiController');

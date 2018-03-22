@@ -8,8 +8,11 @@
             <span id="name"><b>Name:</b> {{kitten.name}}</span><br>
             <span id="age"><b>Age:</b> {{kitten.age}}</span><br>
             <span id="history"><b>History:</b> {{kitten.history}}</span><br>
-            <span id="fertility"><b>Fertile:</b> {{kitten.fertility}}</span><br>
-            <span id="adopted"><b>Adopted:</b> {{kitten.adopted}}</span><br>
+            <span id="fertility"><b>Fertile:</b> {{kitten.fertility}}</span>
+            <br>
+            <span id="adopted"><b>Adopted:</b>{{kitten.adopted}}</span>
+            <br><br>
+            <button class="btn btn-success" v-on:click="Cart(kitten)">Add to Cart</button>
             <hr/>
         </div>
     </div>
@@ -23,6 +26,11 @@
         },
         props:['kittens'],
         components: {
+        },
+        methods:{
+            Cart: function(kitten){
+                this.$emit('addToCart', kitten);
+            }
         }
     }
 </script>
