@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use MongoDB\Client as MongoDbClient;
@@ -28,17 +29,23 @@ class WikiController extends Controller
     public function index()
     {
         //
-        $m = new MongoDbClient(); // connect
-        $db = $m->kittens;
-        $collection = $db->selectCollection('owners');
+        $id = Auth::id();
 
-        $owners = $collection->find();
-        $owners = $owners->toArray();
+        $self = DB::table('owner')
+                        ->where('id', $id)
+                        ->get();
+
+        $owners = DB::select('CALL adoption_info(' . $id . ')');
         $owners = json_encode($owners);
 
-        $kittens = DB::table('kitten')->where('adopted', 0)->get();
+        $kittens = DB::table('kitten')
+                        ->where('adopted', 0)
+                        ->get();
 
-        return view('wiki', compact('owners', 'kittens'));
+        $cart = DB::select(DB::raw('SELECT * FROM see_kittenInfo'));
+        $cart = json_encode($cart);
+
+        return view('wiki', compact('owners', 'kittens', 'self', 'cart'));
     }
 
     /**
@@ -60,6 +67,21 @@ class WikiController extends Controller
     public function store(Request $request)
     {
         //
+        $id = Auth::id();
+        $kitten_id = $request->kitten_id;
+        $user_id = $request->user_id;
+
+        if($user_id){
+            DB::table('cart')
+                ->where('user_id', $user_id)
+                ->delete();
+            }else{
+                DB::table('cart')
+                    ->insert(['user_id' => $id, 'kitten_id' => $kitten_id]);
+                
+            }
+
+        return $request->all();
     }
 
     /**

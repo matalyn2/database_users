@@ -8,6 +8,9 @@
                     <img height="150px" width="125px" :src="kitten.photos">
                     <br>
                     <span id="name"><b>Name:</b> {{person.name}}</span><br>
+                    <span id="phone"><b>Phone:</b> {{person.phone}}</span><br>
+                    <span id="email"><b>Email:</b> {{person.email}}</span><br>
+                    <span id="address"><b>Address:</b> {{person.address}}</span><br>
                     <hr/>
                 </div>
             </div>

@@ -29,7 +29,8 @@
         },
         methods:{
             Cart: function(kitten){
-                this.$emit('addToCart', kitten);
+                this.$emit('addToCart', kitten.id);
+                
             }
         }
     }

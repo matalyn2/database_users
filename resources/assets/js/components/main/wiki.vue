@@ -1,14 +1,20 @@
 <template>
     <div class="container">
         <div class="row">
-            <div id="home">
-                <button v-if="seeCart" v-on:click="reset" class="btn btn-default">Back to Wiki</button>
-                <button v-if="!seeCart" class="btn btn-default" v-on:click="toggle">See Your Adoption Information</button>
-                <button v-if="!seeCart" class="btn btn-default" v-on:click="toggle">See Available Kittens</button>
+            <div v-if="inCart" class="alert alert-danger alert-dismissible" role="alert">
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+              <strong>Sorry!</strong> This kitten is already in your cart!
             </div>
-                <cart v-if="seeCart" :kitten="this.kitten"></cart>
+            <div id="home">
+                <button class="btn btn-default" v-on:click="toggleAdoptionInfo">See Your Adoption Information</button>
+                <button class="btn btn-default" v-on:click="toggleCats">See Available Kittens</button>
+                <button  class="btn btn-default" v-on:click="toggleCart">See Cart</button>
+            </div>
+                <cart v-if="seeCart" :cart="this.cart"></cart>
                 <kittens v-if="seeCats" v-on:addToCart="cartEvent" :kittens="this.kittens"></kittens>
-                <owners v-if="seeAdoptionInfo" :owners="this.owners"></owners>
+                <owners v-if="seeAdoptionInfo" :self="this.self" :owners="this.owners"></owners>
 
         </div>
     </div>
@@ -28,31 +34,46 @@
               seeCats: false,
               seeAdoptionInfo: false,
               seeCart: false,
-              kitten: {},
+              inCart: false
           }
         },
-        props:['kittens', 'owners'],
+        props:['kittens', 'owners', 'self', 'cart'],
         components: {
             'owners': owners,
             'kittens': kittens,
             'cart': cart,
         },
         methods:{
-            toggle: function(){
-                if(this.seeCats){
-                    this.seeCats = false;
-                    this.seeAdoptionInfo = true;
-                } else{
-                    this.seeCats = true;
-                    this.seeAdoptionInfo = false;
-                }
+            toggleCats: function(){
+                this.seeCats = !this.seeCats;
             },
-            cartEvent: function(kitten){
-                this.seeCart = true;
-                this.seeCats = false;
-                this.kitten = kitten;
-
-
+            toggleCart: function(){
+                this.seeCart = !this.seeCart;
+            },
+            toggleAdoptionInfo: function(){
+                this.seeAdoptionInfo = !this.seeAdoptionInfo;
+            },
+            cartEvent: function(kittenId){
+                let count = this.cart.filter((cartItem) => {
+                    if(kittenId == cartItem.kitten_id){
+                        return cartItem;
+                    }
+                })
+                if(count.length == 0){
+                    axios
+                        .post(
+                            "/wiki",
+                            {
+                                kitten_id: kittenId
+                            }
+                        )
+                        .then(r => console.log(r))
+                .catch(e => console.log(e));
+                window.location.reload(true);
+                }
+                else{
+                    this.inCart = true;
+                }
             },
             reset: function(){
                 this.seeCats = false

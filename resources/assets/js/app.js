@@ -18,7 +18,7 @@ window.Vue = require('vue');
 Vue.component('example-component', require('./components/ExampleComponent.vue'));
 Vue.component('wiki', require('./components/main/wiki.vue'));
 Vue.component('cart', require('./components/main/cart.vue'));
-
+Vue.component('blog', require('./components/blog.vue'));
 
 import store from './vuex/store';
 import { mapActions } from 'vuex';
