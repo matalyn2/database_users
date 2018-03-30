@@ -1,7 +1,7 @@
 <template>
     <div class="container" id="blog">
         <div class="row">
-            <div class="article col-lg-2"
+            <div class="article col-lg-4"
                      v-for="article in this.articles"
                      :id="article._id.$oid">
                     <h2 id="title"><b>{{article.title}}</b></h2><br>
